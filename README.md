@@ -1,5 +1,5 @@
 # ku-polls
-Wen application for polls and survey at ku
+When application for polls and survey at ku
 
 ## Online Polls for Kasetsart University
 
@@ -21,5 +21,5 @@ All project documents are in the [Project Wiki](../../wiki/Home)
 - [Project Plan](../../wiki/Development%20Plan)
 - [Iteration 1 Plan](../../wiki/Iteration%201%20Plan) and [Task Board]() (TODO - valid link to task board)
 
-[django-tutorial]: https://docs.djangoproject.com/en/4.1/intro/tutorial01/
+[django-tutorial]: https://www.w3schools.com/django/
 
