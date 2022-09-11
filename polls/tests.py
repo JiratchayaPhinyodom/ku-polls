@@ -3,6 +3,19 @@ from django.urls import reverse
 from django.test import TestCase
 from django.utils import timezone
 from .models import Question
+
+def create_question(question_text, days=0, hours=0, minutes=0, seconds=0, end_vote_date=0):
+    """
+    Create a question with the given `question_text` and published the
+    given number of `days` offset to now (negative for questions published
+    in the past, positive for questions that have yet to be published).
+    """
+    time = timezone.now() + datetime.timedelta(days=days, hours=hours, minutes=minutes, seconds=seconds)
+    end_date = timezone.now() + datetime.timedelta(days=end_vote_date)
+
+    return Question.objects.create(question_text=question_text, pub_date=time, end_date=end_date)
+
+
 class QuestionModelTests(TestCase):
 
     def test_was_published_recently_with_future_question(self):
@@ -10,8 +23,7 @@ class QuestionModelTests(TestCase):
         was_published_recently() returns False for questions whose pub_date
         is in the future.
         """
-        time = timezone.now() + datetime.timedelta(days=30)
-        future_question = Question(pub_date=time)
+        future_question = create_question('What’s your dream holiday destination?', days=30)
         self.assertIs(future_question.was_published_recently(), False)
 
     def test_was_published_recently_with_old_question(self):
@@ -19,8 +31,7 @@ class QuestionModelTests(TestCase):
         was_published_recently() returns False for questions whose pub_date
         is older than 1 day.
         """
-        time = timezone.now() - datetime.timedelta(days=1, seconds=1)
-        old_question = Question(pub_date=time)
+        old_question = create_question('What’s your dream holiday destination?', days=1, seconds=1)
         self.assertIs(old_question.was_published_recently(), False)
 
     def test_was_published_recently_with_recent_question(self):
@@ -28,18 +39,39 @@ class QuestionModelTests(TestCase):
         was_published_recently() returns True for questions whose pub_date
         is within the last day.
         """
-        time = timezone.now() - datetime.timedelta(hours=23, minutes=59, seconds=59)
-        recent_question = Question(pub_date=time)
+        recent_question = create_question('What’s your dream holiday destination?', hours=23, minutes=59, seconds=59)
         self.assertIs(recent_question.was_published_recently(), True)
 
-def create_question(question_text, days):
-    """
-    Create a question with the given `question_text` and published the
-    given number of `days` offset to now (negative for questions published
-    in the past, positive for questions that have yet to be published).
-    """
-    time = timezone.now() + datetime.timedelta(days=days)
-    return Question.objects.create(question_text=question_text, pub_date=time)
+    def test_is_published_recently_with_future_question(self):
+        """
+        was_published_recently() returns False for questions whose pub_date
+        is in the future.
+        """
+        future_question = create_question('What’s your dream holiday destination?', days=30)
+        self.assertIs(future_question.is_published(), False)
+
+    def test_is_published_recently_with_old_question(self):
+        """
+        was_published_recently() returns False for questions whose pub_date
+        is older than 1 day.
+        """
+        old_question = create_question('What’s your dream holiday destination?', days=-1, seconds=-1)
+        self.assertIs(old_question.is_published(), True)
+
+    def test_can_vote_future_question(self):
+        future_question = create_question('What’s your dream holiday destination?', days=30)
+        self.assertIs(future_question.can_vote(), False)
+
+    def test_can_vote_old_question(self):
+        old_question = create_question('What’s your dream holiday destination?', days=1, seconds=1, end_vote_date=2)
+        self.assertIs(old_question.can_vote(), True)
+
+    def test_can_vote_in_time(self):
+        in_time_question = create_question('What’s your dream holiday destination?', days=1, end_vote_date=2)
+        self.assertIs(in_time_question.can_vote(), True)
+
+
+
 
 
 class QuestionIndexViewTests(TestCase):
