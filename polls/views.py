@@ -30,7 +30,7 @@ class IndexView(generic.ListView):
 def detail(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     if not question.can_vote():
-        messages.info(request, 'Time to vote on questions has expired.')
+        messages.info(request, 'Time to vote on questions has expired!')
         return redirect('polls:index')
     return render(request, 'polls/detail.html', {'question': question})
 
