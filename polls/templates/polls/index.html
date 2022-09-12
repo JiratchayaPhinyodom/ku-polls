@@ -20,6 +20,14 @@
     </div>
     {% endfor %}
 {% endif %}
-{% load static %}
 
+{% if latest_question_list %}
+    {% for question in latest_question_list %}
+        <button ><a href="{% url 'polls:results' question.id %}"> Results of {{ question.question_text }}</a></button>
+    {% endfor %}
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+{% load static %}
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
