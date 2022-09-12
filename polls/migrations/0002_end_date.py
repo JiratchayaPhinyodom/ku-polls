@@ -11,6 +11,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='question',
             name='end_date',
-            field=models.DateTimeField(default=django.utils.timezone.now, verbose_name='the ending date for voting.')
+            field=models.DateTimeField(default=django.utils.timezone.now, verbose_name='the ending date for voting.'
+                                       , blank=True, null=True)
         )
     ]
