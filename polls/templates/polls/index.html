@@ -22,9 +22,21 @@
 {% endif %}
 
 {% if latest_question_list %}
+    <ul class="result">
     {% for question in latest_question_list %}
-        <button ><a href="{% url 'polls:results' question.id %}"> Results of {{ question.question_text }}</a></button>
+        <li ><a href="{% url 'polls:results' question.id %}"> Results of {{ question.question_text }}</a></li>
     {% endfor %}
+        </ul>
+{% else %}
+    <p>No polls are available.</p>
+{% endif %}
+
+{% if latest_question_list %}
+    <ul class="vote">
+    {% for question in latest_question_list %}
+        <li ><a href="{% url 'polls:vote' question.id %}"> Vote {{ question.question_text }}</a></li>
+    {% endfor %}
+        </ul>
 {% else %}
     <p>No polls are available.</p>
 {% endif %}
