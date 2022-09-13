@@ -27,17 +27,30 @@ class IndexView(generic.ListView):
 
     def get_queryset(self):
         """:return the last five published questions."""
-        return Question.objects.filter(pub_date__lte=timezone.now()).order_by(
-            '-pub_date')[:5]
+        return Question.objects.filter(pub_date__lte=timezone.now()
+                                       ).order_by('-pub_date')[:5]
 
 
-def detail(request, question_id):
-    """Question detail page that can vote the question."""
-    question = get_object_or_404(Question, pk=question_id)
-    if not question.can_vote():
-        messages.error(request, 'Time to vote on questions has expired!')
-        return redirect('polls:index')
-    return render(request, 'polls/detail.html', {'question': question})
+class DetailView(generic.DetailView):
+    model = Question
+    template_name = 'polls/detail.html'
+
+    def get_queryset(self):
+        """
+        Excludes any questions that aren't published yet.
+        """
+        return Question.objects.filter(pub_date__lte=timezone.now())
+
+    def get(self, request, question_id):
+        """Question detail page that can vote the question."""
+        question = get_object_or_404(Question, pk=question_id)
+        if not question.is_published:
+            messages.error(request, "Question isn't published!")
+            return redirect('polls:index')
+        if not question.can_vote():
+            messages.error(request, 'Time to vote on questions has expired!')
+            return redirect('polls:index')
+        return render(request, 'polls/detail.html', {'question': question})
 
 
 class ResultsView(generic.DetailView):
