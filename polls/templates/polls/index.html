@@ -13,14 +13,6 @@
     <p>No polls are available.</p>
 {% endif %}
 
-{% if messages %}
-    {% for message in messages %}
-    <div class="message">
-        <em><strong>{{message}}</strong></em>
-    </div>
-    {% endfor %}
-{% endif %}
-
 {% if latest_question_list %}
     <ul class="result">
     {% for question in latest_question_list %}
@@ -31,14 +23,24 @@
     <p>No polls are available.</p>
 {% endif %}
 
+<div class="vote" >
 {% if latest_question_list %}
-    <ul class="vote">
+    <ul>
     {% for question in latest_question_list %}
-        <li ><a href="{% url 'polls:vote' question.id %}"> Vote {{ question.question_text }}</a></li>
+        <li ><a href="{% url 'polls:detail' question.id %}">Vote {{ question.question_text }}</a></li>
     {% endfor %}
-        </ul>
+    </ul>
 {% else %}
     <p>No polls are available.</p>
+{% endif %}
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+    <div class="message">
+        <em><strong>{{message}}</strong></em>
+    </div>
+    {% endfor %}
 {% endif %}
 
 {% load static %}
