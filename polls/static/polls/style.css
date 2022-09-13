@@ -1,9 +1,21 @@
-li a {
+
+.question {
     color: blue;
     font-size: 24px;
-    padding: 24px;
+    padding: 100px 200px 100px 300px;
+
 }
 
 body {
     background: white url("images/background.png") no-repeat;
+}
+
+.message {
+    color: red;
+    font-size: 24px;
+    border-style: dashed;
+    border-color: orange;
+    border-width: 4px;
+    display: flex;
+    justify-content: center;
 }
