@@ -125,5 +125,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTHENTICATION_BACKENDS = [
    'django.contrib.auth.backends.ModelBackend',
 ]
+
 LOGIN_REDIRECT_URL = '/polls/'
+
 LOGOUT_REDIRECT_URL = '/'
