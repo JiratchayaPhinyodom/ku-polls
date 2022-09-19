@@ -6,6 +6,8 @@ from django.urls import reverse
 from django.views import generic
 from django.contrib import messages
 from .models import Choice, Question
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def get_queryset(self):
@@ -59,10 +61,14 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
-
+@login_required
 def vote(request, question_id):
     """Vote function that increase a value of vote and save to vote result."""
     question = get_object_or_404(Question, pk=question_id)
+    """Vote for a choice on a question (poll)."""
+    user = request.user
+    if not user.is_authenticated:
+        return redirect('login')
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
