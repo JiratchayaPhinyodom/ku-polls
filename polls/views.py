@@ -8,6 +8,7 @@ from django.contrib import messages
 from .models import Choice, Question
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def get_queryset(self):
@@ -67,6 +68,8 @@ def vote(request, question_id):
     question = get_object_or_404(Question, pk=question_id)
     """Vote for a choice on a question (poll)."""
     user = request.user
+    print("current user is", user.id, "login", user.username)
+    print("Real name:", user.first_name, user.last_name)
     if not user.is_authenticated:
         return redirect('login')
     try:
