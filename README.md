@@ -10,8 +10,15 @@ This application is part of the [Individual Software Process](https://cpske.gith
 
 ## How to Install and Run
 
-To be added.
+1. Clone this project repository to your machine.<br>
+  ```git clone https://github.com/JiratchayaPhinyodom/ku-polls.git```
 
+2. Get into the directory of this repository.<br>
+  ```cd ku-polls```
+
+3. Create a virtual environment.<br>
+  ```python -m venv venv```
+  
 ## Project Documents
 
 All project documents are in the [Project Wiki](../../wiki/Home)
