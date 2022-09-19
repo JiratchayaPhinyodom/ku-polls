@@ -7,7 +7,7 @@ from django.views import generic
 from django.contrib import messages
 from .models import Choice, Question
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import render, redirect
 
 
 def get_queryset(self):
@@ -85,4 +85,3 @@ def vote(request, question_id):
         # user hits the Back button.
         return HttpResponseRedirect(reverse('polls:results',
                                             args=(question.id,)))
-
