@@ -56,6 +56,7 @@ class DetailView(generic.DetailView):
         return render(request, 'polls/detail.html', {'question': question})
 
 
+
 class ResultsView(generic.DetailView):
     """Question results page that display the score vote of the question."""
 
