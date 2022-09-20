@@ -2,7 +2,7 @@ import datetime
 from django.urls import reverse
 from django.test import TestCase
 from django.utils import timezone
-from .models import Question
+from .models import Question, User
 
 def create_question(question_text, days=0, hours=0, minutes=0, seconds=0, end_vote_date=0):
     """
@@ -136,6 +136,13 @@ class QuestionIndexViewTests(TestCase):
         )
 
 class QuestionDetailViewTests(TestCase):
+    def setUp(self):
+        """ Initialize attribute before test"""
+        self.user = User.objects.create_user(username='demo1')
+        self.user.set_password('demopass1')
+        self.user.save()
+        self.client.login(username='demo1', password='demopass1')
+
     def test_future_question(self):
         """
         The detail view of a question with a pub_date in the future
