@@ -60,9 +60,11 @@ class Choice(models.Model):
 
     @property
     def votes(self):
+        """:return the number of votes on the choice of polls question."""
         return Vote.objects.filter(choice=self).count()
 
     def __str__(self):
+        """:return the content of choice text."""
         return self.choice_text
 
 class Vote(models.Model):

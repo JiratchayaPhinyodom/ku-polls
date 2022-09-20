@@ -44,22 +44,37 @@ class QuestionModelTests(TestCase):
         self.assertIs(recent_question.was_published_recently(), True)
 
     def test_is_published_recently_with_future_question(self):
+        """
+        is_published() returns False or questions whose pub_date the future day.
+        """
         future_question = create_question('What’s your dream holiday destination?', days=30)
         self.assertIs(future_question.is_published(), False)
 
     def test_is_published_recently_with_old_question(self):
+        """
+        is_published() returns True or questions whose pub_date the old day.
+        """
         old_question = create_question('What’s your dream holiday destination?', days=-1, seconds=-1)
         self.assertIs(old_question.is_published(), True)
 
     def test_can_vote_future_question(self):
+        """
+        can_vote() in future question.
+        """
         future_question = create_question('What’s your dream holiday destination?', days=30)
         self.assertIs(future_question.can_vote(), False)
 
     def test_can_vote_old_question(self):
+        """
+        can_vote() in old question.
+        """
         old_question = create_question('What’s your dream holiday destination?', days=2, end_vote_date=1)
         self.assertIs(old_question.can_vote(), False)
 
     def test_can_vote_in_time(self):
+        """
+        can_vote() question in time.
+        """
         in_time_question = create_question('What’s your dream holiday destination?', days=-1, end_vote_date=2)
         self.assertIs(in_time_question.can_vote(), True)
 
