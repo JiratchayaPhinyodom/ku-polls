@@ -4,12 +4,9 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.contrib import messages
-from .models import Choice, Question
+from .models import Choice, Question, Vote
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.forms import UserCreationForm
 
 
 def get_queryset(self):
@@ -67,13 +64,12 @@ class ResultsView(generic.DetailView):
 @login_required(login_url='/accounts/login/')
 def vote(request, question_id):
     """Vote function that increase a value of vote and save to vote result."""
-    question = get_object_or_404(Question, pk=question_id)
-    """Vote for a choice on a question (poll)."""
     user = request.user
-    print("current user is", user.id, "login", user.username)
+    print("current user is", user.id, 'login', user.username)
     print("Real name:", user.first_name, user.last_name)
     if not user.is_authenticated:
         return redirect('login')
+    question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
@@ -82,28 +78,14 @@ def vote(request, question_id):
             'question': question,
             'error_message': "You didn't select a choice.",
         })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
+    try:
+        vote_object = Vote.objects.get(user=user, choice__in=question.choice_set.all())
+        vote_object_choice = selected_choice
+        vote_object.save()
+    except Vote.DoesNotExist:
+        Vote.objects.create(user=user, choice=selected_choice)
+        vote_object.save()
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results',
-                                            args=(question.id,)))
-
-def signup(request):
-    """Register a new user."""
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_passwd = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=raw_passwd)
-            login(request, user)
-        return redirect('polls')
-        # what if form is not valid?
-        # we should display a message in signup.html
-    else:
-        form = UserCreationForm()
-    return render(request, 'registration/signup.html', {'form': form})
+    return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
