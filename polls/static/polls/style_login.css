@@ -1,0 +1,19 @@
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #850E35;
+    font-family: helvetica;
+}
+
+.reset {
+    text-decoration: none;
+}
+
+.border {
+    background: #F7E5DF;
+    border-radius: 25px;
+    padding: 100px;
+}
+

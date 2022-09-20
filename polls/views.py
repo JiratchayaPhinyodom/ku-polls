@@ -1,12 +1,14 @@
 """Views of polls app."""
 from django.utils import timezone
 from django.http import HttpResponseRedirect
-from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse
 from django.views import generic
 from django.contrib import messages
-from .models import Choice, Question
-
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Choice, Question, Vote
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import UserCreationForm
 
 def get_queryset(self):
     """Get queryset function.
@@ -33,7 +35,6 @@ class IndexView(generic.ListView):
 
 class DetailView(generic.DetailView):
     """Detail view class."""
-
     model = Question
     template_name = 'polls/detail.html'
 
@@ -44,13 +45,14 @@ class DetailView(generic.DetailView):
     def get(self, request, question_id):
         """Question detail page that can vote the question."""
         question = get_object_or_404(Question, pk=question_id)
-        if not question.is_published:
-            messages.error(request, "Question isn't published!")
-            return redirect('polls:index')
         if not question.can_vote():
-            messages.error(request, 'Time to vote on questions has expired!')
+            messages.error(request, 'Voting is not allowed!')
             return redirect('polls:index')
-        return render(request, 'polls/detail.html', {'question': question})
+        try:
+            prev_choice = question.vote_set.get(user=request.user, question=question).choice
+        except (KeyError, Vote.DoesNotExist):
+            return render(request, 'polls/detail.html', {'question': question})
+        return render(request, 'polls/detail.html', {'question': question, 'previous_choice': prev_choice})
 
 
 class ResultsView(generic.DetailView):
@@ -59,9 +61,14 @@ class ResultsView(generic.DetailView):
     model = Question
     template_name = 'polls/results.html'
 
-
+@login_required(login_url='/accounts/login/')
 def vote(request, question_id):
     """Vote function that increase a value of vote and save to vote result."""
+    user = request.user
+    print("current user is", user.id, 'login', user.username)
+    print("Real name:", user.first_name, user.last_name)
+    if not user.is_authenticated:
+        return redirect('login')
     question = get_object_or_404(Question, pk=question_id)
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
@@ -71,12 +78,13 @@ def vote(request, question_id):
             'question': question,
             'error_message': "You didn't select a choice.",
         })
-    else:
-        selected_choice.votes += 1
-        selected_choice.save()
+    try:
+        vote_object = Vote.objects.get(user=user, question=question)
+        vote_object.choice = selected_choice
+        vote_object.save()
+    except Vote.DoesNotExist:
+        Vote.objects.create(user=user, choice=selected_choice, question=question).save()
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('polls:results',
-                                            args=(question.id,)))
-
+    return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))

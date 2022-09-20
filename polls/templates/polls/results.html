@@ -1,22 +1,68 @@
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'polls/style_results.css' %}">
 <style>
-table {
+    table {
     border-collapse: collapse;
-    border: 4px dashed pink;
+    border: 4px;
     width: 50%;
     height: 50px;
-
+    font-family: helvetica;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 1em 1.5em;
+    font-size: 20px;
+    line-height: 4;
+    background: #F7E5DF;
+    border-radius: 25px;
+    margin-left: auto;
+    margin-right: auto;
 }
+
+.head {
+    font-size: 24px;
+    font-family: helvetica;
+    text-decoration: none;
+    text-transform: uppercase;
+    text-align: center;
+    background: #850E35;
+    border-radius: 25px;
+    color: #F7E5DF;
+    padding: 1em 1.5em;
+}
+
+.choice {
+    font-size: 18px;
+    text-align: left;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+
+body {
+    background-color: #E6C3BF;
+}
+
+.black_list {
+    font-size: 18px;
+    text-align: left;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-family: helvetica;
+    text-decoration: none;
+    text-transform: uppercase;
+    background: #704F4F;
+    border-radius: 25px;
+    color: white;
+    padding: 1em 1.5em;
+    }
+
 </style>
 
-<h1>{{ question.question_text }}</h1>
+<h1 class="head"><strong>{{ question.question_text }}</strong></h1>
 
 <table>
     <tr class="title">
-        <th>Choice</th>
-        <th>Votes</th>
+        <th><strong> Choice </strong></th>
+        <th><strong> Votes </strong></th>
     </tr>
     {% for choice in question.choice_set.all %}
     <tr>
@@ -25,7 +71,5 @@ table {
     </tr>
     {% endfor %}
 </table>
-<br><a href="{% url 'polls:index' %}"> Back to List of Polls </a><br>
 
-{% load static %}
-<link rel="stylesheet" href="{% static 'polls/style_results.css' %}">
+<br><a href="{% url 'polls:index' %}" class="black_list"><strong> Back to List of Polls </strong></a><br>
