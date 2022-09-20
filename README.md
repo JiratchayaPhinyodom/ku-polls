@@ -28,7 +28,7 @@ All project documents are in the [Project Wiki](../../wiki/Home)
 - [Project Plan](../../wiki/Development%20Plan)
 - [Iteration 1 Plan](../../wiki/Iteration%201%20Plan)
 - [Iteration 2 Plan](https://github.com/JiratchayaPhinyodom/ku-polls/wiki/Iteration-2-Plan)
-- [Iteration 3 Plan]
+- [Iteration 3 Plan](https://github.com/JiratchayaPhinyodom/ku-polls/wiki/Iteration-3-Plan)
 
 ## Running KU POLLS
 Users provided by the initial data (users.json):
