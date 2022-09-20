@@ -4,10 +4,11 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.views import generic
 from django.contrib import messages
-from .models import Choice, Question, Vote
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
-
+from .models import Choice, Question, Vote
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.forms import UserCreationForm
 
 def get_queryset(self):
     """Get queryset function.
@@ -34,7 +35,6 @@ class IndexView(generic.ListView):
 
 class DetailView(generic.DetailView):
     """Detail view class."""
-
     model = Question
     template_name = 'polls/detail.html'
 
@@ -45,14 +45,14 @@ class DetailView(generic.DetailView):
     def get(self, request, question_id):
         """Question detail page that can vote the question."""
         question = get_object_or_404(Question, pk=question_id)
-        if not question.is_published:
-            messages.error(request, "Question isn't published!")
-            return redirect('polls:index')
         if not question.can_vote():
-            messages.error(request, 'Time to vote on questions has expired!')
+            messages.error(request, 'Voting is not allowed!')
             return redirect('polls:index')
-        return render(request, 'polls/detail.html', {'question': question})
-
+        try:
+            prev_choice = question.vote_set.get(user=request.user, question=question).choice
+        except (KeyError, Vote.DoesNotExist):
+            return render(request, 'polls/detail.html', {'question': question})
+        return render(request, 'polls/detail.html', {'question': question, 'previous_choice': prev_choice})
 
 
 class ResultsView(generic.DetailView):
@@ -79,12 +79,11 @@ def vote(request, question_id):
             'error_message': "You didn't select a choice.",
         })
     try:
-        vote_object = Vote.objects.get(user=user, choice__in=question.choice_set.all())
-        vote_object_choice = selected_choice
+        vote_object = Vote.objects.get(user=user, question=question)
+        vote_object.choice = selected_choice
         vote_object.save()
     except Vote.DoesNotExist:
-        Vote.objects.create(user=user, choice=selected_choice)
-        vote_object.save()
+        Vote.objects.create(user=user, choice=selected_choice, question=question).save()
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.

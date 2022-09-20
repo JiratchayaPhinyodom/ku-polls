@@ -68,7 +68,4 @@ class Choice(models.Model):
 class Vote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
-
-    @property
-    def question(self):
-        return self.choice.question
+    question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)

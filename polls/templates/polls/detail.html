@@ -4,12 +4,30 @@
     <legend><h1>{{ question.question_text }}</h1></legend>
     {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     {% for choice in question.choice_set.all %}
-        <input
-                type="radio"
-                name="choice"
-                id="choice{{ forloop.counter }}"
-                value="{{ choice.id }}">
+        <div>
+            {% if previous_choice == choice %}
+                <button
+                    type="input"
+                    name="choice"
+                    id="choice{{ forloop.counter }}"
+                    value="{{ choice.id }}"
+                    class="btn btn-danger" disabled
+                >
+                    Voted
+                </button>
+            {% else %}
+                <button
+                    type="input"
+                    name="choice"
+                    id="choice{{ forloop.counter }}"
+                    value="{{ choice.id }}"
+                    class="btn btn-info"
+                >
+                    Vote
+                </button>
+            {% endif %}
         <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+        </div>
     {% endfor %}
 </fieldset>
 <input type="submit" value="Vote"><br>
