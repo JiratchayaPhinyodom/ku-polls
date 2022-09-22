@@ -11,13 +11,45 @@ This application is part of the [Individual Software Process](https://cpske.gith
 ## How to Install and Run
 
 1. Clone this project repository to your machine.<br>
-  ```git clone https://github.com/JiratchayaPhinyodom/ku-polls.git```
+  ```
+  git clone https://github.com/JiratchayaPhinyodom/ku-polls.git
+  ```
 
 2. Get into the directory of this repository.<br>
-  ```cd ku-polls```
+  ```
+  cd ku-polls
+  ```
 
 3. Create a virtual environment.<br>
-  ```python -m venv venv```
+  ```
+  python -m venv venv
+  ```
+4. Activate the virtual environment.<br>
+  ```
+  . env/bin/activate
+  ```
+5. Install all required packages.
+  ```
+  pip install -r requirements.txt
+  ```
+6. Create ```.env``` file in ```ku-polls```
+  ```
+  SECRET_KEY = django-insecure-ljxm5cbi)dqu##+m!s$qdpn(u*p!i4*(ow*s@#hz(1o0&ji-bx
+  DEBUG = True
+  TIME_ZONE = UTC
+  ```
+7. Run this command to migrate the database.
+  ```
+  python manage.py migrate --run-syncdb
+  ```
+8. Initialize data
+  ```
+  python3 manage.py loaddata users polls
+  ```
+9. Start running the server by this command.
+  ```
+  python manage.py runserver
+  ```
   
 ## Project Documents
 
