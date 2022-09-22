@@ -1,6 +1,6 @@
 """Views of polls app."""
 from django.utils import timezone
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.views import generic
 from django.contrib import messages
@@ -42,7 +42,11 @@ class DetailView(generic.DetailView):
 
     def get(self, request, question_id):
         """Question detail page that can vote the question."""
-        question = get_object_or_404(Question, pk=question_id)
+        try:
+            question = get_object_or_404(Question, pk=question_id)
+        except Http404:
+            messages.error(request, f"Poll does not exists.")
+            return redirect('polls:index')
         if not question.can_vote():
             messages.error(request, 'Voting is not allowed!')
             return redirect('polls:index')
