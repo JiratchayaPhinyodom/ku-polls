@@ -68,6 +68,7 @@ class Choice(models.Model):
         return self.choice_text
 
 class Vote(models.Model):
+    """Vote model"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
