@@ -53,7 +53,7 @@ class Question(models.Model):
 
 
 class Choice(models.Model):
-    """Choice model class represent question choice_text and votes."""
+    """Choice model class represent question and choice_text."""
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
@@ -67,8 +67,10 @@ class Choice(models.Model):
         """:return the content of choice text."""
         return self.choice_text
 
+
 class Vote(models.Model):
-    """Vote model"""
+    """Vote model class represent user choice and question."""
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
     question = models.ForeignKey(Question, on_delete=models.CASCADE, null=True)
