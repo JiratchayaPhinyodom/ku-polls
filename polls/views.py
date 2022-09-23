@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Choice, Question, Vote
 
+
 def get_queryset(self):
     """Get queryset function.
 
@@ -45,16 +46,18 @@ class DetailView(generic.DetailView):
         try:
             question = get_object_or_404(Question, pk=question_id)
         except Http404:
-            messages.error(request, f"Poll does not exists.")
+            messages.error(request, "Poll does not exists.")
             return redirect('polls:index')
         if not question.can_vote():
             messages.error(request, 'Voting is not allowed!')
             return redirect('polls:index')
         try:
-            prev_choice = question.vote_set.get(user=request.user, question=question).choice
+            prev_choice = question.vote_set.get(user=request.user,
+                                                question=question).choice
         except (KeyError, Vote.DoesNotExist):
             return render(request, 'polls/detail.html', {'question': question})
-        return render(request, 'polls/detail.html', {'question': question, 'previous_choice': prev_choice})
+        return render(request, 'polls/detail.html',
+                      {'question': question, 'previous_choice': prev_choice})
 
 
 class ResultsView(generic.DetailView):
@@ -62,6 +65,7 @@ class ResultsView(generic.DetailView):
 
     model = Question
     template_name = 'polls/results.html'
+
 
 @login_required(login_url='/accounts/login/')
 def vote(request, question_id):
@@ -85,7 +89,8 @@ def vote(request, question_id):
         vote_object.choice = selected_choice
         vote_object.save()
     except Vote.DoesNotExist:
-        Vote.objects.create(user=user, choice=selected_choice, question=question).save()
+        Vote.objects.create(user=user,
+                            choice=selected_choice, question=question).save()
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
