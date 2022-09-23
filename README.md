@@ -38,9 +38,10 @@ This application is part of the [Individual Software Process](https://cpske.gith
   DEBUG = True
   TIME_ZONE = UTC
   ```
-7. Run this command to migrate the database.
+7. Run this command to migrate the database and load the data.
   ```
-  python manage.py migrate --run-syncdb
+  python manage.py migrate
+  python manage.py loaddate data/*.json
   ```
 8. Initialize data
   ```
