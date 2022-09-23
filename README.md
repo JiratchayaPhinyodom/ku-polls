@@ -43,11 +43,7 @@ This application is part of the [Individual Software Process](https://cpske.gith
   python manage.py migrate
   python manage.py loaddate data/*.json
   ```
-8. Initialize data
-  ```
-  python3 manage.py loaddata users polls
-  ```
-9. Start running the server by this command.
+8. Start running the server by this command.
   ```
   python manage.py runserver
   ```
