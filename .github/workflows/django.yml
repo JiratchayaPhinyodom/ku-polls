@@ -28,7 +28,7 @@ jobs:
     - name: Run Test
       run: |
         coverage
-        coverage run -m unittest polls/test.py
+        coverage run -m unittest test.py
     - name: Lint with flake8
       run: |
         # stop the build if there are Python syntax errors or undefined names
