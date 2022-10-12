@@ -23,8 +23,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install Dependencies
       run: |
-        pip install coverage
+        pip install -r requirement.txt
     - name: Run Tests
       run: |
-        coverage
-        coverage manage.py test
+        python manage.py test
