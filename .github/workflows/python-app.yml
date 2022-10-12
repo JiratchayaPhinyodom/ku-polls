@@ -37,6 +37,6 @@ jobs:
     - name: Run Test
       run: |
         coverage
-        coverage run -m unittest *_test.py
+        coverage run -m unittest polls/tests.py
     - name: Upload coverage reports to Codecov with GitHub Action
       uses: codecov/codecov-action@v3
