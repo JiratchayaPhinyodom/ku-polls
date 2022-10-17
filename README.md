@@ -1,4 +1,5 @@
 # ku-polls
+[![codecov](https://codecov.io/gh/JiratchayaPhinyodom/ku-polls/branch/master/graph/badge.svg?token=3QTY9SO6HF)](https://codecov.io/gh/JiratchayaPhinyodom/ku-polls)
 When application for polls and survey at ku
 
 ## Online Polls for Kasetsart University
