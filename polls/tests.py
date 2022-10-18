@@ -174,7 +174,7 @@ class QuestionDetailViewTests(TestCase):
         """
         The detail view of a question with a pub_date in the future.
 
-        And returns a 404 not found.
+        And returns a 302 not found.
         """
         future_question = \
             create_question(question_text='Future question.', days=5)
