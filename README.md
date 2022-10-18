@@ -1,6 +1,6 @@
 # ku-polls
 [![Django Cl](https://github.com/JiratchayaPhinyodom/ku-polls/actions/workflows/django.yml/badge.svg)](https://github.com/JiratchayaPhinyodom/ku-polls/actions/workflows/django.yml)
-[![codecov](https://codecov.io/gh/JiratchayaPhinyodom/ku-polls/branch/master/graph/badge.svg?token=3QTY9SO6HF)](https://codecov.io/gh/JiratchayaPhinyodom/ku-polls)
+[![codecov](https://codecov.io/gh/JiratchayaPhinyodom/ku-polls/branch/master/graph/badge.svg?token=3QTY9SO6HF)](https://codecov.io/gh/JiratchayaPhinyodom/ku-polls) <br>
 When application for polls and survey at ku
 
 ## Online Polls for Kasetsart University
